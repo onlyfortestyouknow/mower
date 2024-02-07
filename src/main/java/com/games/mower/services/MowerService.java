@@ -19,11 +19,12 @@ import static com.games.mower.enums.Direction.*;
 public class MowerService {
 
     private static final Logger logger = LogManager.getLogger(MowerService.class);
+    private static final String MOWER_RESULT_MESSAGE = "Mower {} final result {}";
 
     public static void executeMowerTasks(List<MowerTask> mowerTaskList){
         for (int i=0; i<mowerTaskList.size(); i++) {
             executeMowerTask(mowerTaskList.get(i));
-            logger.info("Mower {} final result {}", i+1, mowerTaskList.get(i).getMower());
+            logger.info(MOWER_RESULT_MESSAGE, i+1, mowerTaskList.get(i).getMower());
         }
     }
 
