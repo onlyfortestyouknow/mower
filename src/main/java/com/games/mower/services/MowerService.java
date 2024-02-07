@@ -135,4 +135,8 @@ public class MowerService {
         checkCollisions();
 
     }
+
+    public void setMachineTaskList(List<MachineTask> machineTaskList) {
+        this.machineTaskList = machineTaskList;
+    }
 }

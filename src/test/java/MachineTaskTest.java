@@ -70,7 +70,7 @@ public class MachineTaskTest {
         MachineTask task1 = new MachineTask(mower1, "GAGAGAGAA");
         MachineTask task2 = new MachineTask(mower2, "AADAADADDA");
 
-        mowerService = new MowerService(Arrays.asList(task1, task2));
+        mowerService.setMachineTaskList(Arrays.asList(task1, task2));
         mowerService.executeMowerTasks();
 
         assertEquals("1 3 N", mower1.toString());
@@ -84,7 +84,7 @@ public class MachineTaskTest {
         MachineTask task1 = new MachineTask(mower1, "GAGAGAGAA");
         MachineTask task2 = new MachineTask(mower2, "AADAADADDA");
 
-        mowerService = new MowerService(Arrays.asList(task1, task2));
+        mowerService.setMachineTaskList(Arrays.asList(task1, task2));
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> mowerService.executeMowerTasks());
         assertEquals("Collision between machines", exception.getMessage());
 
@@ -97,7 +97,7 @@ public class MachineTaskTest {
         MachineTask task1 = new MachineTask(mower1, "A");
         MachineTask task2 = new MachineTask(mower2, "A");
 
-        mowerService = new MowerService(Arrays.asList(task1, task2));
+        mowerService.setMachineTaskList(Arrays.asList(task1, task2));
         Throwable exception = assertThrows(IllegalArgumentException.class, () -> mowerService.executeMowerTasks());
         assertEquals("Collision between machines", exception.getMessage());
 
