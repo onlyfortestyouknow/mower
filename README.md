@@ -6,4 +6,9 @@ This project is a mower game implemented in Java. It includes classes for managi
 
 run the class ``` com.games.mower.Main ``` 
 
+## Running tests
+
+```properties 
+mvn test
+```
 
