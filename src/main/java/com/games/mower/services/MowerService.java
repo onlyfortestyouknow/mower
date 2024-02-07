@@ -33,7 +33,7 @@ public class MowerService {
 
     public void checkCollisions() {
         Map<String, Machine> positionMap = new HashMap<>();
-        List<Machine> machines = machineTaskList.stream().map(task->task.getMower()).collect(Collectors.toList());
+        List<Machine> machines = machineTaskList.stream().map(task->task.getMachine()).collect(Collectors.toList());
 
         for (Machine machine : machines) {
             String positionKey = machine.getX() + "," + machine.getY();
@@ -51,12 +51,12 @@ public class MowerService {
         checkCollisions();
         for (int i = 0; i< machineTaskList.size(); i++) {
             executeMowerTask(machineTaskList.get(i));
-            logger.info(MOWER_RESULT_MESSAGE, i+1, machineTaskList.get(i).getMower());
+            logger.info(MOWER_RESULT_MESSAGE, i+1, machineTaskList.get(i).getMachine());
         }
     }
 
     public void executeMowerTask(MachineTask machineTask) {
-        Machine mower = machineTask.getMower();
+        Machine mower = machineTask.getMachine();
         String instructions = machineTask.getInstructions();
         for (char instructionChar : instructions.toCharArray()) {
             Action instruction = Action.valueOf(String.valueOf(instructionChar));
