@@ -1,15 +1,15 @@
 package com.games.mower.models;
 
-public class MowerTask {
-    private Mower mower;
+public class MachineTask {
+    private Machine mower;
     private String instructions;
 
-    public MowerTask(Mower mower, String instructions) {
+    public MachineTask(Machine mower, String instructions) {
         this.mower = mower;
         this.instructions = instructions;
     }
 
-    public Mower getMower() {
+    public Machine getMower() {
         return mower;
     }
 

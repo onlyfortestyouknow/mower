@@ -1,55 +1,80 @@
 package com.games.mower.services;
 
-import com.games.mower.commands.TurnRightCommand;
-import com.games.mower.commands.AdvanceCommand;
-import com.games.mower.commands.Command;
-import com.games.mower.commands.TurnLeftCommand;
 import com.games.mower.enums.Action;
 import com.games.mower.enums.Direction;
-import com.games.mower.models.Mower;
-import com.games.mower.models.MowerTask;
+import com.games.mower.models.Machine;
+import com.games.mower.models.MachineTask;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.games.mower.enums.Direction.*;
 
 
 public class MowerService {
 
+    List<MachineTask> machineTaskList = new ArrayList<>();
+
     private static final Logger logger = LogManager.getLogger(MowerService.class);
     private static final String MOWER_RESULT_MESSAGE = "Mower {} final result {}";
+    private static final String MACHINES_COLLISION_ERROR = "Collision between machines";
 
-    public static void executeMowerTasks(List<MowerTask> mowerTaskList){
-        for (int i=0; i<mowerTaskList.size(); i++) {
-            executeMowerTask(mowerTaskList.get(i));
-            logger.info(MOWER_RESULT_MESSAGE, i+1, mowerTaskList.get(i).getMower());
+    public MowerService(List<MachineTask> machineTaskList) {
+        this.machineTaskList = machineTaskList;
+    }
+
+    public MowerService() {
+    }
+
+    public void checkCollisions() {
+        Map<String, Machine> positionMap = new HashMap<>();
+        List<Machine> machines = machineTaskList.stream().map(task->task.getMower()).collect(Collectors.toList());
+
+        for (Machine machine : machines) {
+            String positionKey = machine.getX() + "," + machine.getY();
+
+            if (positionMap.containsKey(positionKey)) {
+                throw new IllegalArgumentException(MACHINES_COLLISION_ERROR);
+            } else {
+                positionMap.put(positionKey, machine);
+            }
+        }
+
+    }
+
+    public void executeMowerTasks(){
+        checkCollisions();
+        for (int i = 0; i< machineTaskList.size(); i++) {
+            executeMowerTask(machineTaskList.get(i));
+            logger.info(MOWER_RESULT_MESSAGE, i+1, machineTaskList.get(i).getMower());
         }
     }
 
-    public static void executeMowerTask(MowerTask mowerTask) {
-        Mower mower = mowerTask.getMower();
-        String instructions = mowerTask.getInstructions();
+    public void executeMowerTask(MachineTask machineTask) {
+        Machine mower = machineTask.getMower();
+        String instructions = machineTask.getInstructions();
         for (char instructionChar : instructions.toCharArray()) {
             Action instruction = Action.valueOf(String.valueOf(instructionChar));
-            Command command = null;
             switch (instruction) {
                 case A:
-                    command = new AdvanceCommand(mower);
+                    advance(mower);
                     break;
                 case D:
-                    command = new TurnRightCommand(mower);
+                    turnRight(mower);
                     break;
                 case G:
-                    command = new TurnLeftCommand(mower);
+                    turnLeft(mower);
                     break;
             }
-            command.execute();
         }
     }
 
-    public static void advance(Mower mower) {
+    public void advance(Machine mower) {
         int x = mower.getX(), y = mower.getY();
         int maxX = mower.getMaxX(), maxY = mower.getMaxY();
         switch (mower.getDirection()) {
@@ -66,9 +91,10 @@ public class MowerService {
                 if (x > 0) mower.setX(x - 1);
                 break;
         }
+        checkCollisions();
     }
 
-    public static void turnRight(Mower mower) {
+    public void turnRight(Machine mower) {
         Direction newDirection = null;
         switch (mower.getDirection()) {
             case N:
@@ -85,9 +111,11 @@ public class MowerService {
                 break;
         }
         mower.setDirection(newDirection);
+        checkCollisions();
+
     }
 
-    public static void turnLeft(Mower mower) {
+    public void turnLeft(Machine mower) {
         Direction newDirection = null;
         switch (mower.getDirection()) {
             case N:
@@ -104,5 +132,7 @@ public class MowerService {
                 break;
         }
         mower.setDirection(newDirection);
+        checkCollisions();
+
     }
 }

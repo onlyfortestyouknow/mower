@@ -1,8 +1,9 @@
 package com.games.mower.handlers;
 
 import com.games.mower.enums.Direction;
+import com.games.mower.models.Machine;
 import com.games.mower.models.Mower;
-import com.games.mower.models.MowerTask;
+import com.games.mower.models.MachineTask;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -17,8 +18,8 @@ public class InputHandler {
     private static final String INPUT_FILE_PATH = "input.txt";
     private static final String LINE_SEPARATOR = " ";
 
-    public List<MowerTask> getMowerTasks(){
-        List<MowerTask> mowerTaskList = new ArrayList<>();
+    public List<MachineTask> getMowerTasks(){
+        List<MachineTask> machineTaskList = new ArrayList<>();
         try {
             String absoluteFilePath = getAbsoluteFilePath();
             Scanner scanner = new Scanner(new File(absoluteFilePath));
@@ -33,10 +34,10 @@ public class InputHandler {
                 char direction = position[2].charAt(0);
                 String instructions = scanner.nextLine();
 
-                Mower mower = new Mower(x, y, Direction.valueOf(String.valueOf(direction)), maxX, maxY);
-                MowerTask mowerTask = new MowerTask(mower, instructions);
+                Machine mower = new Mower(x, y, Direction.valueOf(String.valueOf(direction)), maxX, maxY);
+                MachineTask machineTask = new MachineTask( mower, instructions);
 
-                mowerTaskList.add(mowerTask);
+                machineTaskList.add(machineTask);
 
             }
             scanner.close();
@@ -44,7 +45,7 @@ public class InputHandler {
             e.printStackTrace();
         }
 
-        return mowerTaskList;
+        return machineTaskList;
     }
 
     private String getAbsoluteFilePath(){
