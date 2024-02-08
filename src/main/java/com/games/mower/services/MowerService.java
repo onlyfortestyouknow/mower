@@ -111,7 +111,6 @@ public class MowerService {
                 break;
         }
         mower.setDirection(newDirection);
-        checkCollisions();
 
     }
 
@@ -132,7 +131,6 @@ public class MowerService {
                 break;
         }
         mower.setDirection(newDirection);
-        checkCollisions();
 
     }
 
